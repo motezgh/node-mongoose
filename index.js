@@ -15,11 +15,24 @@ connect.then((db)=>{
     .then((dish)=>{
         console.log(dish);
 
-        return Dishes.find({}).exec(); // executed
+        return Dishes.findByIdAndUpdate(dish._id,{
+            $set:{description:'Updated test'}
+        },{
+            new:true //once the update is complete,then this will return updated dish to us
+        }).exec(); // executed
     })
-    .then((dishes)=>{
-        console.log(dishes);
+    .then((dish)=>{
+        console.log(dish);
 
+        dish.comments.push({
+            rating:5,
+            comment:"I'am getting a sinking feeling!",
+            author:'Leonardo di Carpaccio'
+        });
+        return dish.save();
+    })
+    .then((dish)=>{
+        console.log(dish);
         return Dishes.remove({});
     })
     .then(()=>{
